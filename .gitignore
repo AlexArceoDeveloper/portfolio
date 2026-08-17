@@ -10,3 +10,20 @@
 .env.*
 secrets.json
 appsettings.*.json
+
+# Local operating material - never publish
+PORTFOLIO_PLAN.md
+*_PLAN.md
+INTERNAL_*
+AGENT_*
+PROJECT_INSTRUCTIONS.md
+IDENTITY_GRAPHICS.md
+data/
+automation/
+documents/
+deliverables/
+tmp/
+*.csv
+*.pdf
+*.docx
+*.xlsx
