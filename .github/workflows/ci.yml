@@ -1,0 +1,25 @@
+name: portfolio-ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - name: Build projects
+        run: |
+          dotnet build 02-ai-workflow-integration/src/AiWorkflow.Api/AiWorkflow.Api.csproj --configuration Release
+          dotnet build 03-blazor-delivery-dashboard/src/DeliveryDashboard/DeliveryDashboard.csproj --configuration Release
+          dotnet build 04-intelligent-commerce-platform/src/Commerce.Api/Commerce.Api.csproj --configuration Release
+          dotnet build 05-agentic-knowledge-hub/src/KnowledgeHub.Api/KnowledgeHub.Api.csproj --configuration Release
+      - name: Run commerce domain tests
+        run: dotnet run --project 04-intelligent-commerce-platform/tests/Commerce.Domain.Tests/Commerce.Domain.Tests.csproj --configuration Release
+      - name: Run knowledge hub tests
+        run: dotnet run --project 05-agentic-knowledge-hub/tests/KnowledgeHub.Tests/KnowledgeHub.Tests.csproj --configuration Release

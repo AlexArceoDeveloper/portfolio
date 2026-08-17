@@ -1,0 +1,24 @@
+@page "/"
+@inject DeliveryService DeliveryService
+
+<PageTitle>Delivery Dashboard</PageTitle>
+
+<header class="hero">
+    <span class="eyebrow">A# PORTFOLIO</span>
+    <h1>Delivery dashboard</h1>
+    <p>Accessible project status reporting built with Blazor and the modern .NET stack.</p>
+</header>
+
+<section class="grid" aria-label="Project delivery status">
+    @foreach (var item in DeliveryService.GetItems())
+    {
+        <article class="card">
+            <div class="card-heading">
+                <h2>@item.Name</h2>
+                <span>@item.Status</span>
+            </div>
+            <progress max="100" value="@item.Progress">@item.Progress%</progress>
+            <p>@item.Summary</p>
+        </article>
+    }
+</section>
