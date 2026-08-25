@@ -1,0 +1,40 @@
+:root {
+    color-scheme: dark;
+    font-family: Inter, "Segoe UI", sans-serif;
+    background: #080808;
+    color: #f7f7f7;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: radial-gradient(circle at 75% 0%, #251208 0, #080808 38%); }
+main { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 72px 0; }
+.hero { max-width: 820px; padding: 32px 0 48px; }
+.eyebrow { color: #ff6a00; letter-spacing: .16em; font-weight: 800; font-size: .78rem; margin: 0 0 12px; }
+h1 { font-size: clamp(2.6rem, 7vw, 5.7rem); line-height: .98; letter-spacing: -.055em; margin: 0; }
+h2 { margin: 4px 0 0; font-size: 1.45rem; }
+.subtitle { color: #b8b8b8; font-size: 1.1rem; line-height: 1.7; max-width: 720px; }
+.actions { display: flex; gap: 12px; margin-top: 28px; }
+button { border: 0; border-radius: 9px; padding: 12px 18px; background: #ff6a00; color: #080808; font-weight: 800; cursor: pointer; }
+button.secondary { background: #242424; color: #fff; }
+.metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 18px; }
+.metrics article, .panel { background: rgba(22, 22, 22, .92); border: 1px solid #333; border-radius: 15px; }
+.metrics article { padding: 20px; }
+.metrics span { display: block; color: #999; font-size: .85rem; }
+.metrics strong { display: block; font-size: 2rem; margin-top: 5px; }
+.panel { padding: 24px; }
+.panel-heading { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 22px; }
+.connection { color: #7de39b; font-size: .82rem; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 14px 12px; text-align: left; border-bottom: 1px solid #2d2d2d; white-space: nowrap; }
+th { color: #999; font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; }
+.status { display: inline-block; padding: 4px 9px; border-radius: 999px; font-size: .76rem; font-weight: 800; }
+.status.normal { background: #173623; color: #8ef0a9; }
+.status.warning { background: #4a350e; color: #ffd677; }
+.status.critical { background: #4d1818; color: #ff9a9a; }
+.empty { color: #999; padding: 28px 0; }
+@media (max-width: 720px) {
+    main { width: min(100% - 24px, 1180px); padding-top: 36px; }
+    .metrics { grid-template-columns: 1fr; }
+    .panel-heading { gap: 18px; flex-direction: column; }
+}

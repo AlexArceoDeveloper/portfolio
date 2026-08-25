@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="Commerce.Companion.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    BackgroundColor="{StaticResource Background}"
+    Title="Commerce Companion">
+    <ScrollView>
+        <VerticalStackLayout Padding="32" Spacing="18" MaximumWidthRequest="720">
+            <Label
+                Text="A#  COMMERCE COMPANION"
+                FontAttributes="Bold"
+                FontSize="15"
+                TextColor="{StaticResource Accent}" />
+            <Label
+                Text="Exercise a secure payment API from a .NET MAUI client."
+                FontAttributes="Bold"
+                FontSize="30"
+                TextColor="{StaticResource TextPrimary}" />
+            <Label
+                Text="The client sends order-level data only. It does not collect card numbers, credentials or payment-provider secrets."
+                FontSize="15"
+                TextColor="{StaticResource TextSecondary}" />
+
+            <Border
+                Padding="22"
+                BackgroundColor="{StaticResource Surface}"
+                Stroke="#353535"
+                StrokeShape="RoundRectangle 14">
+                <VerticalStackLayout Spacing="14">
+                    <Label Text="API base URL" TextColor="{StaticResource TextSecondary}" />
+                    <Entry
+                        x:Name="ApiUrlEntry"
+                        Text="http://localhost:8080"
+                        Keyboard="Url"
+                        TextColor="{StaticResource TextPrimary}" />
+                    <Label Text="Order ID" TextColor="{StaticResource TextSecondary}" />
+                    <Entry
+                        x:Name="OrderIdEntry"
+                        Text="maui-demo-1001"
+                        TextColor="{StaticResource TextPrimary}" />
+                    <Grid ColumnDefinitions="2*,*" ColumnSpacing="14">
+                        <VerticalStackLayout Grid.Column="0" Spacing="6">
+                            <Label Text="Amount" TextColor="{StaticResource TextSecondary}" />
+                            <Entry
+                                x:Name="AmountEntry"
+                                Text="129.99"
+                                Keyboard="Numeric"
+                                TextColor="{StaticResource TextPrimary}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="6">
+                            <Label Text="Currency" TextColor="{StaticResource TextSecondary}" />
+                            <Entry
+                                x:Name="CurrencyEntry"
+                                Text="EUR"
+                                MaxLength="3"
+                                TextColor="{StaticResource TextPrimary}" />
+                        </VerticalStackLayout>
+                    </Grid>
+                    <Button
+                        x:Name="SubmitButton"
+                        Text="Create sandbox payment"
+                        BackgroundColor="{StaticResource Accent}"
+                        TextColor="#080808"
+                        FontAttributes="Bold"
+                        Clicked="OnSubmitClicked" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border
+                Padding="18"
+                BackgroundColor="{StaticResource Surface}"
+                Stroke="#353535"
+                StrokeShape="RoundRectangle 14">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Result" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                    <Label
+                        x:Name="ResultLabel"
+                        Text="Ready."
+                        LineBreakMode="WordWrap"
+                        TextColor="{StaticResource TextSecondary}" />
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

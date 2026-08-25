@@ -1,8 +1,47 @@
 services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: commerce
+      POSTGRES_USER: commerce
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local-only-password}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U commerce -d commerce"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    volumes:
+      - commerce-data:/var/lib/postgresql/data
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.62.0
+    environment:
+      COLLECTOR_OTLP_ENABLED: "true"
+    ports:
+      - "16686:16686"
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.136.0
+    command: ["--config=/etc/otelcol-contrib/config.yaml"]
+    volumes:
+      - ./observability/otel-collector.yaml:/etc/otelcol-contrib/config.yaml:ro
+    depends_on:
+      - jaeger
+
   commerce-api:
     build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+      otel-collector:
+        condition: service_started
     ports:
       - "8080:8080"
     environment:
       ASPNETCORE_URLS: http://+:8080
       Payments__WebhookSecret: local-development-secret
+      ConnectionStrings__Commerce: Host=postgres;Port=5432;Database=commerce;Username=commerce;Password=${POSTGRES_PASSWORD:-local-only-password}
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+
+volumes:
+  commerce-data:

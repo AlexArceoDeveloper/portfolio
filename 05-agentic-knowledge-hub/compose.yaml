@@ -1,0 +1,18 @@
+services:
+  evaluation-service:
+    build: ./services/evaluation-service
+    ports:
+      - "8090:8090"
+
+  knowledge-hub:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - evaluation-service
+    ports:
+      - "8085:8080"
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      Evaluation__PythonEndpoint: http://evaluation-service:8090/evaluate
+      Evaluation__AllowInsecureHttp: "true"

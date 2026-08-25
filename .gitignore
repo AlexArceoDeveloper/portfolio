@@ -27,3 +27,5 @@ tmp/
 *.pdf
 *.docx
 *.xlsx
+__pycache__/
+*.py[cod]

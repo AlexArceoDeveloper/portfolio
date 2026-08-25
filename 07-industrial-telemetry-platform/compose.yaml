@@ -1,0 +1,26 @@
+services:
+  mqtt:
+    image: eclipse-mosquitto:2.0.22
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+
+  telemetry-web:
+    build: .
+    depends_on:
+      - mqtt
+    ports:
+      - "8087:8080"
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      Mqtt__Enabled: "true"
+      Mqtt__Host: mqtt
+      Mqtt__Port: "1883"
+      Mqtt__TopicPrefix: portfolio/telemetry
+      Telemetry__DataPath: /data/telemetry.jsonl
+    volumes:
+      - telemetry-data:/data
+
+volumes:
+  telemetry-data:

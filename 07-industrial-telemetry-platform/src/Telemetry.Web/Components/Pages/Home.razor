@@ -1,0 +1,129 @@
+@page "/"
+@rendermode InteractiveServer
+@implements IAsyncDisposable
+@inject ITelemetryStore Store
+@inject TelemetrySimulator Simulator
+
+<PageTitle>Industrial Telemetry</PageTitle>
+
+<section class="hero">
+    <p class="eyebrow">A# · INDUSTRIAL TELEMETRY</p>
+    <h1>Operational signals, without the noise.</h1>
+    <p class="subtitle">A .NET, MQTT and Blazor demonstration for simulated equipment telemetry, durable event capture and threshold-based alerts.</p>
+    <div class="actions">
+        <button @onclick="SimulateAsync">Simulate reading</button>
+        <button class="secondary" @onclick="RefreshAsync">Refresh</button>
+    </div>
+</section>
+
+<section class="metrics">
+    <article>
+        <span>Readings</span>
+        <strong>@_readings.Count</strong>
+    </article>
+    <article>
+        <span>Warnings</span>
+        <strong>@_readings.Count(reading => reading.Status == "warning")</strong>
+    </article>
+    <article>
+        <span>Critical</span>
+        <strong>@_readings.Count(reading => reading.Status == "critical")</strong>
+    </article>
+</section>
+
+<section class="panel">
+    <div class="panel-heading">
+        <div>
+            <p class="eyebrow">LIVE FEED</p>
+            <h2>Latest equipment readings</h2>
+        </div>
+        <span class="connection">● monitoring</span>
+    </div>
+
+    @if (_readings.Count == 0)
+    {
+        <p class="empty">No telemetry yet. Simulate a reading or connect the MQTT compose environment.</p>
+    }
+    else
+    {
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Device</th>
+                        <th>Temperature</th>
+                        <th>Vibration</th>
+                        <th>Pressure</th>
+                        <th>Status</th>
+                        <th>UTC</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var reading in _readings)
+                    {
+                        <tr>
+                            <td>@reading.DeviceId</td>
+                            <td>@reading.TemperatureCelsius.ToString("0.0") °C</td>
+                            <td>@reading.VibrationMillimetersPerSecond.ToString("0.0") mm/s</td>
+                            <td>@reading.PressureBar.ToString("0.0") bar</td>
+                            <td><span class="status @reading.Status">@reading.Status</span></td>
+                            <td>@reading.RecordedAt.ToString("HH:mm:ss")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>
+
+@code {
+    private IReadOnlyCollection<TelemetryReading> _readings = [];
+    private readonly CancellationTokenSource _refreshCancellation = new();
+    private Task? _refreshLoop;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RefreshAsync();
+        _refreshLoop = RefreshLoopAsync(_refreshCancellation.Token);
+    }
+
+    private async Task SimulateAsync()
+    {
+        await Simulator.PublishAsync("line-01");
+        await RefreshAsync();
+    }
+
+    private async Task RefreshAsync()
+    {
+        _readings = await Store.LatestAsync(50);
+    }
+
+    private async Task RefreshLoopAsync(CancellationToken cancellationToken)
+    {
+        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(3));
+        try
+        {
+            while (await timer.WaitForNextTickAsync(cancellationToken))
+            {
+                await InvokeAsync(async () =>
+                {
+                    await RefreshAsync();
+                    StateHasChanged();
+                });
+            }
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await _refreshCancellation.CancelAsync();
+        if (_refreshLoop is not null)
+        {
+            await _refreshLoop;
+        }
+        _refreshCancellation.Dispose();
+    }
+}

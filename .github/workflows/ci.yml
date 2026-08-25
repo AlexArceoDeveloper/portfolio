@@ -15,11 +15,37 @@ jobs:
           dotnet-version: 10.0.x
       - name: Build projects
         run: |
+          dotnet build 01-aspnet-core-api/src/Portfolio.Api/Portfolio.Api.csproj --configuration Release
           dotnet build 02-ai-workflow-integration/src/AiWorkflow.Api/AiWorkflow.Api.csproj --configuration Release
           dotnet build 03-blazor-delivery-dashboard/src/DeliveryDashboard/DeliveryDashboard.csproj --configuration Release
           dotnet build 04-intelligent-commerce-platform/src/Commerce.Api/Commerce.Api.csproj --configuration Release
           dotnet build 05-agentic-knowledge-hub/src/KnowledgeHub.Api/KnowledgeHub.Api.csproj --configuration Release
+          dotnet build 07-industrial-telemetry-platform/src/Telemetry.Web/Telemetry.Web.csproj --configuration Release
+      - name: Run API integration tests
+        run: dotnet test 01-aspnet-core-api/tests/Portfolio.Api.Tests/Portfolio.Api.Tests.csproj --configuration Release --no-restore
       - name: Run commerce domain tests
         run: dotnet run --project 04-intelligent-commerce-platform/tests/Commerce.Domain.Tests/Commerce.Domain.Tests.csproj --configuration Release
       - name: Run knowledge hub tests
         run: dotnet run --project 05-agentic-knowledge-hub/tests/KnowledgeHub.Tests/KnowledgeHub.Tests.csproj --configuration Release
+      - name: Run Python evaluation tests
+        run: python -m unittest discover 05-agentic-knowledge-hub/services/evaluation-service/tests
+      - name: Run industrial telemetry tests
+        run: dotnet run --project 07-industrial-telemetry-platform/tests/Telemetry.Tests/Telemetry.Tests.csproj --configuration Release
+      - name: Validate deployment assets
+        run: |
+          docker compose -f 04-intelligent-commerce-platform/compose.yaml config --quiet
+          docker compose -f 05-agentic-knowledge-hub/compose.yaml config --quiet
+          docker compose -f 07-industrial-telemetry-platform/compose.yaml config --quiet
+          kubectl kustomize 04-intelligent-commerce-platform/deploy/kubernetes > /tmp/commerce-manifests.yaml
+
+  maui-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - name: Install MAUI workload
+        run: dotnet workload install maui-windows
+      - name: Build Commerce Companion
+        run: dotnet build 06-commerce-companion/src/Commerce.Companion/Commerce.Companion.csproj --configuration Release --framework net10.0-windows10.0.19041.0
