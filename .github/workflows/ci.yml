@@ -9,8 +9,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 10.0.x
       - name: Build projects
@@ -22,7 +22,7 @@ jobs:
           dotnet build 05-agentic-knowledge-hub/src/KnowledgeHub.Api/KnowledgeHub.Api.csproj --configuration Release
           dotnet build 07-industrial-telemetry-platform/src/Telemetry.Web/Telemetry.Web.csproj --configuration Release
       - name: Run API integration tests
-        run: dotnet test 01-aspnet-core-api/tests/Portfolio.Api.Tests/Portfolio.Api.Tests.csproj --configuration Release --no-restore
+        run: dotnet test 01-aspnet-core-api/tests/Portfolio.Api.Tests/Portfolio.Api.Tests.csproj --configuration Release
       - name: Run commerce domain tests
         run: dotnet run --project 04-intelligent-commerce-platform/tests/Commerce.Domain.Tests/Commerce.Domain.Tests.csproj --configuration Release
       - name: Run knowledge hub tests
@@ -41,8 +41,8 @@ jobs:
   maui-windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 10.0.x
       - name: Install MAUI workload
