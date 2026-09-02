@@ -12,6 +12,7 @@ Backend-focused software developer building secure APIs, cloud-ready integration
 
 | Project | What it demonstrates | Verification |
 | --- | --- | --- |
+| [AI Automation Backend](08-ai-automation-backend) | .NET 10 AI agents, RAG, EF Core/PostgreSQL, Identity/JWT, AWS S3, OpenTelemetry and a Python neural-routing service | Executable .NET and Python tests plus compose topology |
 | [Intelligent Commerce Platform](04-intelligent-commerce-platform) | .NET 10 payments API, PostgreSQL/EF Core persistence, idempotency, signed webhooks, explainable risk rules, Docker and Azure Bicep | Executable domain tests and compose environment |
 | [Agentic Knowledge Hub](05-agentic-knowledge-hub) | Grounded retrieval, pgvector/Qdrant, approval-aware agents, external model integration and Python/.NET evaluation | Executable Python, safety, workflow and retrieval tests |
 | [Blazor Delivery Dashboard](03-blazor-delivery-dashboard) | Blazor UI, API integration and delivery-oriented presentation | Release build in CI |
@@ -22,7 +23,7 @@ Backend-focused software developer building secure APIs, cloud-ready integration
 
 ## Technical focus
 
-`C#` · `.NET 10` · `ASP.NET Core` · `Python` · `FastAPI` · `REST APIs` · `EF Core` · `PostgreSQL` · `SQL Server` · `Azure` · `Blazor` · `.NET MAUI` · `MQTT` · `Docker` · `Kubernetes` · `OpenTelemetry` · `CI/CD` · `Power Platform` · `AI integrations`
+`C#` · `.NET 10` · `ASP.NET Core` · `Python` · `FastAPI` · `REST APIs` · `AI agents` · `RAG` · `JWT` · `EF Core` · `PostgreSQL` · `AWS S3` · `SQL Server` · `Azure` · `Blazor` · `.NET MAUI` · `MQTT` · `Docker` · `Kubernetes` · `OpenTelemetry` · `CI/CD` · `Power Platform` · `AI integrations`
 
 ## Quality gates
 
