@@ -22,6 +22,8 @@ jobs:
           dotnet build 05-agentic-knowledge-hub/src/KnowledgeHub.Api/KnowledgeHub.Api.csproj --configuration Release
           dotnet build 07-industrial-telemetry-platform/src/Telemetry.Web/Telemetry.Web.csproj --configuration Release
           dotnet build 08-ai-automation-backend/src/AiAutomation.Api/AiAutomation.Api.csproj --configuration Release
+          dotnet build 09-ai-workflow-control-center/src/AiControlCenter/AiControlCenter.csproj --configuration Release
+          dotnet build 10-field-assistant-blazor-hybrid/src/FieldAssistant.Core/FieldAssistant.Core.csproj --configuration Release
       - name: Run API integration tests
         run: dotnet test 01-aspnet-core-api/tests/Portfolio.Api.Tests/Portfolio.Api.Tests.csproj --configuration Release
       - name: Run commerce domain tests
@@ -34,6 +36,10 @@ jobs:
         run: dotnet run --project 07-industrial-telemetry-platform/tests/Telemetry.Tests/Telemetry.Tests.csproj --configuration Release
       - name: Run AI automation backend tests
         run: dotnet run --project 08-ai-automation-backend/tests/AiAutomation.Tests/AiAutomation.Tests.csproj --configuration Release
+      - name: Run MVC workflow control tests
+        run: dotnet run --project 09-ai-workflow-control-center/tests/AiControlCenter.Tests/AiControlCenter.Tests.csproj --configuration Release
+      - name: Run Field Assistant core tests
+        run: dotnet run --project 10-field-assistant-blazor-hybrid/tests/FieldAssistant.Core.Tests/FieldAssistant.Core.Tests.csproj --configuration Release
       - name: Run neural router tests
         run: |
           python -m pip install -r 08-ai-automation-backend/services/neural-router/requirements.txt
@@ -57,3 +63,5 @@ jobs:
         run: dotnet workload install maui-windows
       - name: Build Commerce Companion
         run: dotnet build 06-commerce-companion/src/Commerce.Companion/Commerce.Companion.csproj --configuration Release --framework net10.0-windows10.0.19041.0
+      - name: Build Field Assistant Blazor Hybrid
+        run: dotnet build 10-field-assistant-blazor-hybrid/src/FieldAssistant.Hybrid/FieldAssistant.Hybrid.csproj --configuration Release --framework net10.0-windows10.0.19041.0

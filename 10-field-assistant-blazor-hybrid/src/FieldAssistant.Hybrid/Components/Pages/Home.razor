@@ -1,0 +1,157 @@
+@page "/"
+@inject AgentApiClient ApiClient
+@inject PromptOutbox Outbox
+
+<section class="hero">
+    <p class="eyebrow">Mobile AI operations</p>
+    <h1>Grounded answers, available where work happens.</h1>
+    <p>Connect to the .NET agent backend, inspect every tool decision and preserve tasks safely when the network is unavailable.</p>
+</section>
+
+<section class="workspace-grid">
+    <div class="panel request-panel">
+        <div class="panel-title"><span>01</span><div><h2>Run an agent task</h2><p>Credentials remain in memory for this session.</p></div></div>
+
+        <label for="endpoint">API endpoint</label>
+        <input id="endpoint" @bind="endpoint" inputmode="url" />
+
+        <label for="token">Access token <small>optional · never queued</small></label>
+        <input id="token" @bind="accessToken" type="password" autocomplete="off" placeholder="Bearer token" />
+
+        <label for="prompt">Task</label>
+        <textarea id="prompt" @bind="prompt" rows="5"></textarea>
+
+        <div class="tool-row">
+            <label><input type="checkbox" @bind="useKnowledge" /> Knowledge search</label>
+            <label><input type="checkbox" @bind="requestNotification" /> External notification</label>
+        </div>
+
+        <div class="button-row">
+            <button class="primary" @onclick="RunAsync" disabled="@busy">@(busy ? "Running…" : "Run securely")</button>
+            <button class="secondary" @onclick="Queue">Queue offline</button>
+        </div>
+
+        <div class="outbox"><span>Offline outbox</span><strong>@Outbox.Count</strong></div>
+        @if (!string.IsNullOrWhiteSpace(status))
+        {
+            <p class="status-message">@status</p>
+        }
+    </div>
+
+    <div class="panel response-panel">
+        <div class="panel-title"><span>02</span><div><h2>Inspectable response</h2><p>Evidence and policies remain visible.</p></div></div>
+        @if (response is null)
+        {
+            <div class="empty-response">
+                <div class="signal"><i></i><i></i><i></i></div>
+                <h3>Awaiting a task</h3>
+                <p>A successful run will expose its intent, controls and trace identifier here.</p>
+            </div>
+        }
+        else
+        {
+            <div class="response-meta">
+                <span>@response.Intent</span>
+                <span class="@(response.HasPendingApproval ? "pending" : "clear")">
+                    @(response.HasPendingApproval ? "Approval pending" : "Policy clear")
+                </span>
+            </div>
+            <p class="answer">@response.Answer</p>
+            <h3>Tool decisions</h3>
+            <div class="decisions">
+                @foreach (var tool in response.Tools)
+                {
+                    <div><code>@tool.Name</code><span>@tool.Status.Replace('_', ' ')</span></div>
+                }
+            </div>
+            <h3>Evidence</h3>
+            @if (response.Evidence.Count == 0)
+            {
+                <p class="muted">No matching evidence was returned.</p>
+            }
+            else
+            {
+                @foreach (var item in response.Evidence)
+                {
+                    <article class="evidence">
+                        <strong>@item.Title</strong><span>@item.Score.ToString("P0")</span>
+                        <p>@item.Excerpt</p>
+                    </article>
+                }
+            }
+            <div class="trace"><span>Correlation ID</span><code>@response.CorrelationId</code></div>
+        }
+    </div>
+</section>
+
+@code {
+    private string endpoint = "https://localhost:7080";
+    private string accessToken = string.Empty;
+    private string prompt = "How should a high-priority service incident be classified and routed?";
+    private string status = string.Empty;
+    private bool useKnowledge = true;
+    private bool requestNotification;
+    private bool busy;
+    private AgentRunResponse? response;
+
+    private IReadOnlyCollection<string> RequestedTools()
+    {
+        var tools = new List<string> { "answer.compose" };
+        if (useKnowledge)
+        {
+            tools.Add("knowledge.search");
+        }
+        if (requestNotification)
+        {
+            tools.Add("external.notify");
+        }
+        return tools;
+    }
+
+    private async Task RunAsync()
+    {
+        if (string.IsNullOrWhiteSpace(prompt))
+        {
+            status = "Enter a task before running the workflow.";
+            return;
+        }
+
+        busy = true;
+        status = "Connecting to the agent backend…";
+        response = null;
+        try
+        {
+            var request = new AgentRunRequest(prompt, RequestedTools(), []);
+            response = await ApiClient.RunAsync(endpoint, request, accessToken);
+            status = $"Run {response.RunId.ToString()[..8]} completed.";
+        }
+        catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException)
+        {
+            Outbox.Enqueue(prompt, RequestedTools());
+            status = "The backend is unavailable. The task was queued without its token.";
+        }
+        catch (ArgumentException exception)
+        {
+            status = exception.Message;
+        }
+        finally
+        {
+            accessToken = string.Empty;
+            busy = false;
+        }
+    }
+
+    private void Queue()
+    {
+        try
+        {
+            Outbox.Enqueue(prompt, RequestedTools());
+            accessToken = string.Empty;
+            status = "Task queued locally. Authentication data was not stored.";
+        }
+        catch (ArgumentException exception)
+        {
+            status = exception.Message;
+        }
+    }
+}

@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Workflow Control Center</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" asp-controller="Home" asp-action="Index" aria-label="AI Workflow Control Center home">
+            <span class="brand-mark">A#</span>
+            <span>Workflow Control Center</span>
+        </a>
+        <span class="status"><i></i> Policy engine online</span>
+    </header>
+    <main>
+        @RenderBody()
+    </main>
+    <footer>ASP.NET Core MVC · Explainable routing · Approval-aware automation</footer>
+</body>
+</html>

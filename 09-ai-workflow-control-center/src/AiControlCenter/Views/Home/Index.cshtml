@@ -1,0 +1,95 @@
+@model ControlCenterViewModel
+
+<section class="hero">
+    <div>
+        <p class="eyebrow">Governed automation</p>
+        <h1>Plan AI workflows before they act.</h1>
+        <p class="intro">Transform an operational request into a transparent route, processing stages and a review decision. Every result is deterministic and testable.</p>
+    </div>
+    <div class="metric-panel" aria-label="System principles">
+        <div><strong>4</strong><span>routing paths</span></div>
+        <div><strong>0</strong><span>implicit writes</span></div>
+        <div><strong>100%</strong><span>traceable plans</span></div>
+    </div>
+</section>
+
+<section class="workspace">
+    <form asp-action="Index" method="post" class="card request-card">
+        <div class="card-heading">
+            <span>01</span>
+            <div><h2>Describe the workflow</h2><p>Use synthetic or non-sensitive data in this demonstration.</p></div>
+        </div>
+        <div asp-validation-summary="ModelOnly" class="validation"></div>
+
+        <label asp-for="Input.Task"></label>
+        <textarea asp-for="Input.Task" rows="4"></textarea>
+        <span asp-validation-for="Input.Task" class="validation"></span>
+
+        <div class="grid-two">
+            <div>
+                <label asp-for="Input.BusinessArea"></label>
+                <input asp-for="Input.BusinessArea" />
+                <span asp-validation-for="Input.BusinessArea" class="validation"></span>
+            </div>
+            <div>
+                <label asp-for="Input.EstimatedDailyVolume"></label>
+                <input asp-for="Input.EstimatedDailyVolume" type="number" min="1" max="500" />
+                <span asp-validation-for="Input.EstimatedDailyVolume" class="validation"></span>
+            </div>
+        </div>
+
+        <label asp-for="Input.Sensitivity"></label>
+        <select asp-for="Input.Sensitivity" asp-items="Html.GetEnumSelectList<DataSensitivity>()"></select>
+
+        <label class="checkbox-row">
+            <input asp-for="Input.WritesExternalSystems" />
+            <span>@Html.DisplayNameFor(model => model.Input.WritesExternalSystems)</span>
+        </label>
+
+        <button type="submit">Generate governed plan <span>→</span></button>
+    </form>
+
+    <article class="card result-card">
+        <div class="card-heading">
+            <span>02</span>
+            <div><h2>Decision envelope</h2><p>Route, controls and action boundary.</p></div>
+        </div>
+        @if (Model.Plan is null)
+        {
+            <div class="empty-state">
+                <div class="orbit"><i></i></div>
+                <h3>Ready to evaluate</h3>
+                <p>Submit a workflow request to generate an inspectable execution plan.</p>
+            </div>
+        }
+        else
+        {
+            <div class="decision @(Model.Plan.RequiresApproval ? "review" : "automatic")">
+                <span>@(Model.Plan.RequiresApproval ? "REVIEW REQUIRED" : "AUTOMATIC PATH")</span>
+                <strong>@Model.Plan.Route</strong>
+                <small>@Model.Plan.Confidence.ToString("P0") confidence</small>
+            </div>
+            <p class="reason">@Model.Plan.DecisionReason</p>
+            <div class="result-grid">
+                <div>
+                    <h3>Processing stages</h3>
+                    <ol>
+                        @foreach (var stage in Model.Plan.Stages)
+                        {
+                            <li>@stage</li>
+                        }
+                    </ol>
+                </div>
+                <div>
+                    <h3>Control checks</h3>
+                    <ul>
+                        @foreach (var control in Model.Plan.Controls)
+                        {
+                            <li>@control</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+    </article>
+</section>
