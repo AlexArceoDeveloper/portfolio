@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Request History list model",
+  "type": "object",
+  "required": ["RequestId", "EventType", "OccurredAtUtc", "Actor", "WorkflowRunId"],
+  "properties": {
+    "RequestId": { "type": "integer", "minimum": 1 },
+    "EventType": { "type": "string", "enum": ["Created", "Assigned", "PriorityChanged", "Resolved", "AutomationFailed"] },
+    "OccurredAtUtc": { "type": "string", "format": "date-time" },
+    "Actor": { "type": "string", "maxLength": 255 },
+    "WorkflowRunId": { "type": "string", "maxLength": 100 },
+    "Notes": { "type": "string", "maxLength": 1000 }
+  }
+}

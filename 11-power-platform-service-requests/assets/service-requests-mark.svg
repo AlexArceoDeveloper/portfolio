@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Power Platform Service Requests</title>
+  <desc id="desc">A blue service request card connected to an automation flow.</desc>
+  <rect width="512" height="512" rx="96" fill="#08111f"/>
+  <rect x="98" y="104" width="214" height="280" rx="28" fill="#ffffff"/>
+  <rect x="130" y="150" width="150" height="18" rx="9" fill="#2475e8"/>
+  <rect x="130" y="196" width="118" height="14" rx="7" fill="#a8bfdc"/>
+  <rect x="130" y="232" width="142" height="14" rx="7" fill="#a8bfdc"/>
+  <rect x="130" y="268" width="92" height="14" rx="7" fill="#a8bfdc"/>
+  <path d="M176 324h58" stroke="#2475e8" stroke-width="18" stroke-linecap="round"/>
+  <circle cx="367" cy="183" r="45" fill="#31a8ff"/>
+  <circle cx="393" cy="278" r="45" fill="#7356f1"/>
+  <circle cx="341" cy="369" r="45" fill="#00b294"/>
+  <path d="M361 226l21 13M379 320l-19 14M332 327l12-76" fill="none" stroke="#dcecff" stroke-width="14" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,41 @@
+{
+  "displayName": "Service request intake",
+  "purpose": "Illustrative source-control-friendly flow contract; configure connections and actions in the target tenant.",
+  "trigger": {
+    "connector": "SharePoint",
+    "event": "When an item is created",
+    "list": "Service Requests"
+  },
+  "steps": [
+    {
+      "name": "Validate request",
+      "type": "condition",
+      "rule": "Title, Category, Impact and RequesterEmail must be present"
+    },
+    {
+      "name": "Derive routing",
+      "type": "switch",
+      "rules": [
+        { "when": "Impact equals High", "priority": "High", "ownerTeam": "Platform Operations" },
+        { "when": "Category equals Access", "priority": "Normal", "ownerTeam": "Identity and Access" },
+        { "when": "otherwise", "priority": "Normal", "ownerTeam": "Service Desk" }
+      ]
+    },
+    {
+      "name": "Update request",
+      "type": "SharePoint.UpdateItem",
+      "values": { "Status": "Assigned", "Priority": "derived", "OwnerTeam": "derived" }
+    },
+    {
+      "name": "Write history",
+      "type": "SharePoint.CreateItem",
+      "list": "Request History",
+      "values": { "EventType": "Assigned", "WorkflowRunId": "workflow run identifier" }
+    },
+    {
+      "name": "Notify owner",
+      "type": "Teams.PostMessageOrOutlook.SendEmail",
+      "failurePolicy": "Write AutomationFailed history event; do not conceal the failure"
+    }
+  ]
+}

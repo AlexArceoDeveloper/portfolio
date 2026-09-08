@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Service Requests list model",
+  "type": "object",
+  "required": ["Title", "Category", "Description", "Impact", "RequesterEmail", "Status", "Priority", "OwnerTeam"],
+  "properties": {
+    "Title": { "type": "string", "maxLength": 120 },
+    "Category": { "type": "string", "enum": ["Access", "Incident", "Information", "Service request"] },
+    "Description": { "type": "string", "maxLength": 2000 },
+    "Impact": { "type": "string", "enum": ["Low", "Normal", "High"] },
+    "RequesterEmail": { "type": "string", "format": "email" },
+    "Status": { "type": "string", "enum": ["New", "Assigned", "In progress", "Resolved", "Closed"] },
+    "Priority": { "type": "string", "enum": ["Normal", "High"] },
+    "OwnerTeam": { "type": "string", "maxLength": 100 },
+    "Resolution": { "type": "string", "maxLength": 2000 }
+  }
+}

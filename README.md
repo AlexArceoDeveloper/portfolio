@@ -14,6 +14,7 @@ Backend-focused software developer building secure APIs, cloud-ready integration
 | --- | --- | --- |
 | [Field Assistant · Blazor Hybrid](10-field-assistant-blazor-hybrid) | .NET MAUI Blazor Hybrid, typed agent API integration, HTTPS boundaries, transient authentication and an offline-safe outbox | Windows release build plus executable core tests |
 | [AI Workflow Control Center](09-ai-workflow-control-center) | ASP.NET Core MVC, strongly typed Razor views, explainable routing and approval-aware workflow planning | Release build plus executable planning tests |
+| [Power Platform Service Requests](11-power-platform-service-requests) | Power Apps Canvas and Power Fx design, SharePoint list modelling, Power Automate flow design, Copilot Studio triage and source-control-friendly ALM boundaries | Offline schema and secret-safety validation |
 | [AI Automation Backend](08-ai-automation-backend) | .NET 10 AI agents, RAG, EF Core/PostgreSQL, Identity/JWT, AWS S3, OpenTelemetry and a Python neural-routing service | Executable .NET and Python tests plus compose topology |
 | [Intelligent Commerce Platform](04-intelligent-commerce-platform) | .NET 10 payments API, PostgreSQL/EF Core persistence, idempotency, signed webhooks, explainable risk rules, Docker and Azure Bicep | Executable domain tests and compose environment |
 | [Agentic Knowledge Hub](05-agentic-knowledge-hub) | Grounded retrieval, pgvector/Qdrant, approval-aware agents, external model integration and Python/.NET evaluation | Executable Python, safety, workflow and retrieval tests |

@@ -32,6 +32,8 @@ jobs:
         run: dotnet run --project 05-agentic-knowledge-hub/tests/KnowledgeHub.Tests/KnowledgeHub.Tests.csproj --configuration Release
       - name: Run Python evaluation tests
         run: python -m unittest discover 05-agentic-knowledge-hub/services/evaluation-service/tests
+      - name: Run Power Platform artefact tests
+        run: python -m unittest discover 11-power-platform-service-requests/tests
       - name: Run industrial telemetry tests
         run: dotnet run --project 07-industrial-telemetry-platform/tests/Telemetry.Tests/Telemetry.Tests.csproj --configuration Release
       - name: Run AI automation backend tests
