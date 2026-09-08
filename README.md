@@ -8,6 +8,10 @@
 
 Backend-focused software developer building secure APIs, cloud-ready integrations and practical automation with the Microsoft stack. This portfolio turns architecture decisions into runnable code, tests and deployment assets.
 
+## Portfolio website
+
+Explore the professional project presentations at [alexarceodeveloper.github.io/portfolio](https://alexarceodeveloper.github.io/portfolio/). Each demonstrator has an individual page with its focus, architecture, technology and verification evidence.
+
 ## Selected engineering evidence
 
 | Project | What it demonstrates | Verification |
